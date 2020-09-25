@@ -114,18 +114,18 @@
                 <artifactId>appassembler-maven-plugin</artifactId>
                 <version>2.0.0</version>
                 <configuration>
-                    <!-- 生成linux, windows两种平台的执行脚本 -->
+                    <!-- Generate execution scripts for linux and windows platforms -->
                     <platforms>
                         <platform>windows</platform>
                         <platform>unix</platform>
                     </platforms>
-                    <!-- 根目录 -->
+                    <!-- Root directory -->
                     <assembleDirectory>${project.build.directory}/${project.name}</assembleDirectory>
-                    <!-- 打包的jar，以及maven依赖的jar放到这个目录里面 -->
+                    <!-- The packaged jar and the jar that maven depends on are placed in this directory -->
                     <repositoryName>lib</repositoryName>
-                    <!-- 可执行脚本的目录 -->
+                    <!-- Directory of executable scripts -->
                     <binFolder>bin</binFolder>
-                    <!-- lib目录中jar的存放规则，默认是${groupId}/${artifactId}的目录格式，flat表示直接把jar放到lib目录 -->
+                    <!-- The jar storage rules in the lib directory, the default is the directory format of ${groupId}/${artifactId}, flat means to put the jar directly in the lib directory -->
                     <repositoryLayout>flat</repositoryLayout>
                     <encoding>UTF-8</encoding>
                     <logsDirectory>logs</logsDirectory>
