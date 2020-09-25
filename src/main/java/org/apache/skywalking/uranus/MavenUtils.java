@@ -7,6 +7,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.dongliu.requests.RawResponse;
 import net.dongliu.requests.Requests;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.versioning.ComparableVersion;
@@ -25,7 +26,11 @@ public class MavenUtils {
         Preconditions.checkArgument(StringUtils.isNotBlank(artifactId), "The parameter artifactId cannot be black.");
         String groupIdUrl = getGroupIdUrl(groupId);
         String metaDataUrl = REPO_ROOT_MIRROR_URL + groupIdUrl + "/" + artifactId + "/maven-metadata.xml";
-        String readToText = Requests.get(metaDataUrl).send().readToText();
+        RawResponse send = Requests.get(metaDataUrl).send();
+        if (send.statusCode() != 200) {
+            throw new RuntimeException("artifact not found.");
+        }
+        String readToText = send.readToText();
         Map<String, Object> map;
         try {
             map = XmlMapConverter.xmlToMap(readToText);
@@ -76,17 +81,25 @@ public class MavenUtils {
     }
 
     /**
-     * 某版本的包中是否存在某类
-     *
-     * @param className
-     * @param mavenArtifact
-     * @return
+     * Whether a certain category exists in a certain version of the package.
      */
     public static boolean exists(String className, MavenArtifact mavenArtifact) {
         return getAllClassNameListByMavenArtifact(mavenArtifact).contains(className);
     }
 
-    public static void fillArtifactInfo(String className, MavenArtifact mavenArtifact) {
+    /**
+     * Whether a certain category exists in a certain version of the package.
+     */
+    public static boolean exists(String className, String groupId, String artifactId, String version) {
+        return getAllClassNameListByMavenArtifact(
+                new MavenArtifact()
+                        .setGroupId(groupId)
+                        .setArtifactId(artifactId)
+                        .setVersion(version)
+        ).contains(className);
+    }
+
+    public static MavenArtifact getTargetClassInfoInArtifacts(String className, MavenArtifact mavenArtifact) {
         ArrayList<MavenArtifact> aliasArtifactList = new ArrayList<>(mavenArtifact.getAliasArtifactList());
         aliasArtifactList.add(0, mavenArtifact);
 
@@ -134,6 +147,7 @@ public class MavenUtils {
             }
         }
         aliasArtifactList.remove(mavenArtifact);
+        return mavenArtifact;
     }
 
     public static List<String> getNewClassList(MavenArtifact oldArtifact, List<MavenArtifact> newArtifactList) {
@@ -168,6 +182,19 @@ public class MavenUtils {
     public static List<String> getOldClassList(MavenArtifact oldArtifact, List<MavenArtifact> newArtifactList) {
         return getNewClassList(newArtifactList, Collections.singletonList(oldArtifact));
     }
+
+    /**
+     * 获取不在旧版本存在，也不在新版本存在的类
+     *
+     * @return
+     */
+    public static List<String> getNotOldNotNewClassList(List<MavenArtifact> oldArtifactList, List<MavenArtifact> currentArtifactList, List<MavenArtifact> newArtifactList) {
+        List<String> newClassList = MavenUtils.getNewClassList(oldArtifactList, currentArtifactList);
+        List<String> oldClassList = MavenUtils.getOldClassList(currentArtifactList, newArtifactList);
+        newClassList.retainAll(oldClassList);
+        return newClassList;
+    }
+
 
     public static List<String> getAllClassNameListByMavenArtifact(MavenArtifact mavenArtifact) {
         return getAllClassNameListByMavenArtifact(mavenArtifact.getGroupId(), mavenArtifact.getArtifactId(), mavenArtifact.getVersion());

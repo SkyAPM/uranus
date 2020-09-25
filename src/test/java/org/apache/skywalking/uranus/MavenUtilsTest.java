@@ -5,6 +5,7 @@ import net.dongliu.requests.Requests;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -64,16 +65,14 @@ public class MavenUtilsTest {
     }
 
     @Test
-    void getNewOldClassList() {
-        List<String> newClassList = MavenUtils.getNewClassList(oldMavenArtifact, currentMavenArtifact);
-        List<String> oldClassList = MavenUtils.getOldClassList(currentMavenArtifact, newMavenArtifactList);
-        newClassList.retainAll(oldClassList);
-        System.err.println(newClassList.size());
-        newClassList.forEach(s -> System.err.println(s + "\r\n"));
+    void getNotOldNotNewClassList() {
+        List<String> newOldClassList = MavenUtils.getNotOldNotNewClassList(Collections.singletonList(oldMavenArtifact), Collections.singletonList(currentMavenArtifact), newMavenArtifactList);
+        System.err.println(newOldClassList.size());
+        newOldClassList.forEach(s -> System.err.println(s + "\r\n"));
     }
 
     @Test
-    void fillArtifactInfo() {
+    void findTargetClassInfoInArtifacts() {
         MavenArtifact mavenArtifact = new MavenArtifact()
                 .setGroupId("org.mongodb")
                 .setArtifactId("mongo-java-driver")
@@ -84,7 +83,7 @@ public class MavenUtilsTest {
                                 new MavenArtifact().setGroupId("org.mongodb").setArtifactId("bson")
                         )
                 );
-        MavenUtils.fillArtifactInfo("com.mongodb.client.MongoClientImpl", mavenArtifact);
+        MavenUtils.getTargetClassInfoInArtifacts("com.mongodb.client.MongoClientImpl", mavenArtifact);
         log.info("mavenArtifact:[{}]", JsonUtils.toJSONString(mavenArtifact));
     }
 
