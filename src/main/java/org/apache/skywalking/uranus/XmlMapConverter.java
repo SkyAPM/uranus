@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * XML-MAP转换器
+ * XML-MAP converter
  * <p>
  * Created by S.Violet on 2016/3/29.
  */
@@ -33,7 +33,7 @@ public class XmlMapConverter {
      * MAP->XML
      *
      * @param map      map
-     * @param rootName 根节点名称
+     * @param rootName Root node name
      * @return XML(String)
      * @throws Exception
      */
@@ -45,8 +45,8 @@ public class XmlMapConverter {
      * MAP->XML
      *
      * @param map          map
-     * @param rootName     根节点名称
-     * @param outputFormat 输出格式
+     * @param rootName     Root node name
+     * @param outputFormat Output format
      * @return XML(String)
      * @throws Exception
      */
@@ -134,7 +134,7 @@ public class XmlMapConverter {
                 continue;
             }
             String name = ((Element) subElement).getName();
-            Object data = null;
+            Object data;
             if (((Element) subElement).isTextOnly()) {
                 data = ((Element) subElement).getData();
             } else {

@@ -67,7 +67,6 @@ public class BaseBootstrap {
 
     @SneakyThrows
     public static CommandLine getCommandLine(Options options, String[] args) {
-        //用来打印帮助信息
         HelpFormatter hf = new HelpFormatter();
         hf.setWidth(220);
 

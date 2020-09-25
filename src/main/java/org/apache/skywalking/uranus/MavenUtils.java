@@ -69,11 +69,9 @@ public class MavenUtils {
     }
 
     /**
-     * 版本号比较
+     * Version number comparison
      *
-     * @param v1
-     * @param v2
-     * @return 0代表相等，x代表左边大，-x代表右边大
+     * @return 0 means equal, x means big on the left, -x means big on the right
      * MavenUtils.compareVersion("2.7.0-rc2", "2.7.0")<0
      */
     public static int compareVersion(String v1, String v2) {
@@ -118,7 +116,7 @@ public class MavenUtils {
         stringArrayList.sort(MavenUtils::compareVersion);
         for (String version : stringArrayList) {
             List<MavenArtifact> mavenArtifacts = artifactArrayListMultimap.get(version);
-            //同一版本所有包都不存在该类的次数
+            //The number of times that all packages of the same version do not exist in this category
             int notExistsNum = 0;
             for (MavenArtifact artifact : mavenArtifacts) {
                 if (!artifact.getVersionList().contains(version)) {
@@ -184,9 +182,7 @@ public class MavenUtils {
     }
 
     /**
-     * 获取不在旧版本存在，也不在新版本存在的类
-     *
-     * @return
+     * Get classes that do not exist in the old version or in the new version
      */
     public static List<String> getNotOldNotNewClassList(List<MavenArtifact> oldArtifactList, List<MavenArtifact> currentArtifactList, List<MavenArtifact> newArtifactList) {
         List<String> newClassList = MavenUtils.getNewClassList(oldArtifactList, currentArtifactList);

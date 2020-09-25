@@ -22,15 +22,15 @@ public class MavenArtifact implements Serializable {
     private String version;
 
     /**
-     * 该jar包所有版本号
+     * All version numbers of the jar package
      */
     private List<String> versionList;
     /**
-     * 最早出现的版本
+     * Earliest version
      */
     private MavenArtifact firstAddedArtifact;
     /**
-     * 最早被移除的版本
+     * Earliest version removed
      */
     private String firstRemovedVersion;
 
