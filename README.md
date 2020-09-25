@@ -14,7 +14,7 @@ mvn clean package appassembler:assemble
 
 ```bash
 
-tar -zcf  uranus-1.0.tar.gz target/uranus
+tar  -C target/ -zcf  uranus-1.0.tar.gz uranus
 
 ```
 
