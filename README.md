@@ -1,3 +1,5 @@
+# With the power of AI era, developing plugins is becoming easy and straightforward. Just Ask your coding agent to scan code and propose. The existing plugins and source codes of target libs should be enough.
+
 # uranus
 
 A tool helps on locating witness class for Apache SkyWalking plugin.
